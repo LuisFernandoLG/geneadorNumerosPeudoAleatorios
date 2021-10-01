@@ -1,0 +1,26 @@
+@import "globals";
+@import "./components/Container";
+@import "./components/Nav";
+@import "./components/Formula";
+@import "./components/Input";
+@import "./components/Data";
+
+h1 {
+  color: blue;
+}
+
+body {
+  font-family: "Roboto", sans-serif;
+}
+
+.main {
+  display: flex;
+  padding: 2rem;
+  gap: 1rem;
+}
+
+.input-data {
+  padding: 1rem;
+  background: #e4e4e4;
+  border-radius: 1rem;
+}

@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Generador</title>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- Syles -->
+    <link rel="stylesheet" href="../css/normalize.css" />
+    <link rel="stylesheet" href="../css/main.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="nav">
+        <h1 class="nav__name-method">Cuadrados medios</h1>
+        <select class="select">
+          <option>option1</option>
+          <option>option2</option>
+          <option>option"1"</option>
+        </select>
+      </nav>
+
+      <div class="main">
+        <div class="input-data">
+          <div class="formula">(x)²</div>
+
+          <div class="input">
+            <label class="input__seed-label" for="input__seed">Semilla</label>
+            <input
+              name="input__seed"
+              class="input__seed"
+              type="text"
+              placeholder="####"
+            />
+            <button class="btn-calculate">Calcular</button>
+          </div>
+
+          <p class="life-cycle-text">
+            Ciclo de vida: <span class="life-cycle-text__result">x</span>
+          </p>
+        </div>
+        <div class="data">
+          <div>
+            1.
+            <span>Hola</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="../js/utils/utils.js"></script>
+    <script src="../js/generators.js"></script>
+    <script type="module" src="../js/main.js"></script>
+  </body>
+</html>

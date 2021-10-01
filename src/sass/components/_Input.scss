@@ -1,0 +1,29 @@
+.input {
+  margin: 1rem 0;
+
+  label {
+    font-size: 1.2rem;
+    color: #63b4b8;
+    font-weight: 500;
+  }
+
+  &__seed {
+    padding: 0.5rem 0.5rem;
+    color: #3d2c8d;
+    width: 100%;
+
+    border: none;
+    outline: none;
+  }
+
+  button {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    background: #eeeeee;
+    color: #272828;
+
+    margin: 1rem 0;
+    padding: 0.5rem 1rem;
+  }
+}
