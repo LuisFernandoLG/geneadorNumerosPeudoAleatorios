@@ -21,8 +21,8 @@
   <body>
     <div class="container">
       <nav class="nav">
-        <h1 class="nav__name-method">Cuadrados medios</h1>
-        <select class="select">
+        <!-- <h1 class="nav__name-method">Cuadrados medios</h1> -->
+        <select class="select-method">
           <option>option1</option>
           <option>option2</option>
           <option>option"1"</option>
@@ -33,14 +33,35 @@
         <div class="input-data">
           <div class="formula">(x)²</div>
 
-          <div class="input">
-            <label class="input__seed-label" for="input__seed">Semilla</label>
-            <input
-              name="input__seed"
-              class="input__seed"
-              type="text"
-              placeholder="####"
-            />
+          <div class="inputs">
+            <div class="input">
+              <label
+                class="input__seed-label input__seed-label1"
+                for="input__seed1"
+                >Semilla #1</label
+              >
+              <input
+                name="input__seed input__seed1"
+                class="input__seed input__seed1"
+                type="text"
+                placeholder="####"
+              />
+            </div>
+
+            <div class="input input2">
+              <label
+                class="input__seed-label input__seed-label2"
+                for="input__seed2"
+                >Semilla #2</label
+              >
+              <input
+                name="input__seed2"
+                class="input__seed2"
+                type="text"
+                placeholder="####"
+              />
+            </div>
+
             <button class="btn-calculate">Calcular</button>
           </div>
 
@@ -55,8 +76,17 @@
           </div>
         </div>
       </div>
-    </div>
 
+      <div>
+        <canvas id="myChart"></canvas>
+      </div>
+    </div>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.5.1/chart.min.js"
+      integrity="sha512-Wt1bJGtlnMtGP0dqNFH1xlkLBNpEodaiQ8ZN5JLA5wpc1sUlk/O5uuOMNgvzddzkpvZ9GLyYNa8w2s7rqiTk5Q=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    ></script>
     <script src="./app/js/utils/utils.js"></script>
     <script type="module" src="./app/js/main.js"></script>
   </body>

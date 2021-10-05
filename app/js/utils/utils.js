@@ -9,13 +9,18 @@ const addZeroLeft = (number) => {
 
 const reduceToFourDigits = (number) => {
   let numberFixed = isLenEven(number) ? number : addZeroLeft(number);
-  console.log({ number });
   while (numberFixed.length > 4) {
-    console.log(numberFixed);
     numberFixed = numberFixed.substring(1, numberFixed.length - 1);
   }
-  console.log(numberFixed);
   return numberFixed;
 };
 
-export { isLenEven, addZeroLeft, reduceToFourDigits };
+function trunc(x, posiciones = 0) {
+  var s = x.toString();
+  var l = s.length;
+  var decimalLength = s.indexOf(".") + 1;
+  var numStr = s.substr(0, decimalLength + posiciones);
+  return Number(numStr);
+}
+
+export { isLenEven, addZeroLeft, reduceToFourDigits, trunc };
