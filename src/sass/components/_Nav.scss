@@ -2,10 +2,14 @@
   display: flex;
   justify-content: space-between;
 
-  padding: 0.5rem 1rem;
+  padding: 1rem 2rem;
+  background: #93b5c6;
+
+  top: 0;
+  position: sticky;
 
   &__name-method {
     font-size: 1.5rem;
-    color: #7f7c82;
+    color: #93b5c6;
   }
 }

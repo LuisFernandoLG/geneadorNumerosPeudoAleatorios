@@ -5,6 +5,7 @@
 @import "./components/Input";
 @import "./components/Data";
 @import "./components/Chart";
+@import "./components/ComboBox";
 
 h1 {
   color: blue;
@@ -17,11 +18,27 @@ body {
 .main {
   display: flex;
   padding: 2rem;
-  gap: 1rem;
+  gap: 3rem;
 }
 
 .input-data {
-  padding: 1rem;
+  padding: 2rem;
   background: #e4e4e4;
   border-radius: 1rem;
+}
+
+.life-cycle-text__result {
+  background: #93b5c6;
+  color: #fff;
+  padding: 0.2rem 0.5rem;
+  border-radius: 0.5rem;
+}
+
+.footer {
+  width: 100%;
+  padding: 1rem;
+
+  text-align: center;
+  background: #93b5c6;
+  color: #fff;
 }

@@ -247,7 +247,7 @@ const updateUI = () => {
     case methods.MULTIPLICADOR_CONSTANTE: {
       $inputGroup2.style.display = "block";
       $label1.textContent = "a";
-      $label2.textContent = "x0";
+      $label2.innerHTML = "x0";
       $formula.textContent = "(a) x (x0)";
       break;
     }
