@@ -112,6 +112,7 @@ button {
   font-weight: 800;
   border: none;
   outline: none;
+  cursor: pointer;
 }
 
 h1 {
@@ -136,10 +137,10 @@ body {
   border-radius: 1rem;
 }
 
-.life-cycle-text__result {
+.extra-data {
   background: #93b5c6;
   color: #fff;
-  padding: 0.2rem 0.5rem;
+  padding: 0.1rem 0.5rem;
   border-radius: 0.5rem;
 }
 

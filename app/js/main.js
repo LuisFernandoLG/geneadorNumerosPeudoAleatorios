@@ -1,6 +1,7 @@
 import { reduceToFourDigits, trunc, chartConfig } from "./utils/utils.js";
 
 const $formula = document.querySelector(".formula");
+const $media = document.querySelector(".media__result");
 const $selectMethod = document.querySelector(".select-method");
 const $inputSeed = document.querySelector(".input__seed");
 const $inputSeed2 = document.querySelector(".input__seed2");
@@ -194,10 +195,18 @@ const resolveReducer = (method, payload) => {
   }
 };
 
+const getMedia = (array) => {
+  let sumatoria = array.reduce((prev, item, _) => prev + parseFloat(item), 0);
+  let len = array.length - 1;
+  let media = sumatoria / len;
+  return trunc(media, 2);
+};
+
 const insertData = (data) => {
   $dataContainer.innerHTML = "";
 
   $lifeCycle.textContent = data.length;
+  $media.textContent = getMedia(data);
 
   data.forEach((result, i) => {
     const $div = document.createElement("DIV");
