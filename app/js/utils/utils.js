@@ -23,4 +23,19 @@ function trunc(x, posiciones = 0) {
   return Number(numStr);
 }
 
-export { isLenEven, addZeroLeft, reduceToFourDigits, trunc };
+const data = {
+  datasets: [
+    {
+      label: "Dispersión",
+      data: [],
+      backgroundColor: "rgb(255, 99, 132)",
+    },
+  ],
+};
+const chartConfig = {
+  type: "bubble",
+  data: data,
+  options: {},
+};
+
+export { reduceToFourDigits, trunc, chartConfig };

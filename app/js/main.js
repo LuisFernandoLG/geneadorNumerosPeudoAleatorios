@@ -1,11 +1,5 @@
-import {
-  isLenEven,
-  addZeroLeft,
-  reduceToFourDigits,
-  trunc,
-} from "./utils/utils.js";
+import { reduceToFourDigits, trunc, chartConfig } from "./utils/utils.js";
 
-const $title = document.querySelector(".nav__name-method");
 const $formula = document.querySelector(".formula");
 const $selectMethod = document.querySelector(".select-method");
 const $inputSeed = document.querySelector(".input__seed");
@@ -19,22 +13,7 @@ const $label1 = document.querySelector(".input__seed-label1");
 const $label2 = document.querySelector(".input__seed-label2");
 const $canva = document.getElementById("myChart");
 
-const data = {
-  datasets: [
-    {
-      label: "Dispersión",
-      data: [],
-      backgroundColor: "rgb(255, 99, 132)",
-    },
-  ],
-};
-const config = {
-  type: "bubble",
-  data: data,
-  options: {},
-};
-
-let myChart = new Chart($canva, config);
+let myChart = new Chart($canva, chartConfig);
 
 const getCuadradosMedios = (num) => {
   let resultsObj = {};
@@ -141,6 +120,31 @@ const getLinealMultiplicativo = (a, seed1) => {
   return resultsArray;
 };
 
+const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
+  let resultsObj = {};
+  let resultsArray = [];
+  let isRepited = false;
+  for (let i = 0; i <= iterations; i++) {
+    const num1 = initialNumbers[i];
+    const num2 = initialNumbers[initialNumbers.length - 1];
+    let sumatoria = num1 + num2;
+    const x1_mod = sumatoria % mod;
+    const result = x1_mod / (mod - 1);
+
+    isRepited = resultsObj.hasOwnProperty(result);
+    if (!isRepited) {
+      initialNumbers.push(x1_mod);
+
+      let beautyNumber = trunc(result, 4);
+      resultsArray.push(beautyNumber);
+    } else {
+      i = iterations + 1;
+    }
+  }
+
+  return resultsArray;
+};
+
 const FourDigitsRegex = /^\d{4}$/;
 
 $btnCalculate.addEventListener("click", () => {
@@ -178,6 +182,10 @@ const resolveReducer = (method, payload) => {
 
     case methods.LINEAL_MULTIPLICATIVO: {
       return getLinealMultiplicativo(payload[0], payload[1]);
+    }
+
+    case methods.LINEAL_ADITIVO: {
+      return getLinealAditivo([65, 89, 98, 3, 69], payload[0]);
     }
 
     default: {
@@ -257,6 +265,14 @@ const updateUI = () => {
       $label2.textContent = "x0";
       $formula.textContent = "(a * x0) MOD 32";
 
+      break;
+    }
+
+    case methods.LINEAL_ADITIVO: {
+      $inputGroup2.style.display = "none";
+      $label1.textContent = "M";
+      $formula.textContent =
+        "[x1:65, x2:89, x3:98, x4:3, x5:69]    (x1 * xn-1) MOD M";
       break;
     }
   }
