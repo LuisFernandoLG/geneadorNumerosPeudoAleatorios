@@ -142,15 +142,15 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
     const num2 = initialNumbers[initialNumbers.length - 1];
     let sumatoria = parseFloat(num1) + parseFloat(num2);
     const x1_mod = sumatoria % mod;
-    const result = x1_mod / (mod - 1);
+    const result = trunc(x1_mod / (mod - 1), 4);
 
     isRepited = resultsObj.hasOwnProperty(result);
     if (!isRepited) {
+      resultsObj[result] = result;
       initialNumbers.push(x1_mod);
-
-      let beautyNumber = trunc(result, 4);
-      resultsArray.push(beautyNumber);
+      resultsArray.push(result);
     } else {
+      console.log("terminado");
       i = iterations + 1;
     }
   }
@@ -172,7 +172,6 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
     let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
     if (!isRepited) {
-      // let beautyNumber = trunc(reduced / (mod - 1), 4);
       resultsObj[reduced] = reduced;
       resultsArray.push(reduced);
 
