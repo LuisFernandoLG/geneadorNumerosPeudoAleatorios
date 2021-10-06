@@ -97,7 +97,7 @@ button {
           box-shadow: 5px 5px 25px #27272754;
 }
 
-.data div span {
+.data div .no-repited {
   font-weight: 600;
   color: #ff6384;
 }
@@ -144,11 +144,16 @@ body {
   border-radius: 0.5rem;
 }
 
-.footer {
+.repite .footer {
   width: 100%;
   padding: 1rem;
   text-align: center;
   background: #93b5c6;
   color: #fff;
+}
+
+.life-cycle-text {
+  margin: 0.5rem 0;
+  line-height: 2;
 }
 /*# sourceMappingURL=main.css.map */

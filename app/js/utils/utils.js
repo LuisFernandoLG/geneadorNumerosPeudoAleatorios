@@ -26,7 +26,7 @@ function trunc(x, posiciones = 0) {
 const data = {
   datasets: [
     {
-      label: "Dispersión",
+      label: "Dispersión Números NO repetidos",
       data: [],
       backgroundColor: "rgb(255, 99, 132)",
     },

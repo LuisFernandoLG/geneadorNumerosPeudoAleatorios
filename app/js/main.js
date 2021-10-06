@@ -33,38 +33,48 @@ const getCuadradosMedios = (num) => {
   let resultsArray = [];
   let isRepited = false;
 
-  do {
+  for (let i = 0; i <= 500; i++) {
     let pow = num * num;
     let reduced = reduceToFourDigits(pow.toString());
     isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      const beautyNumber = `${0}.${reduced}`;
+    const beautyNumber = `${0}.${reduced}`;
+
+    isRepited = resultsObj.hasOwnProperty(reduced);
+    if (isRepited) {
+      resultsArray.push({ number: beautyNumber, isRepited: true });
+    } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push(beautyNumber);
-      num = reduced;
+      resultsArray.push({ number: beautyNumber, isRepited: false });
     }
-  } while (isRepited === false);
+
+    num = reduced;
+  }
+
   return resultsArray;
 };
 
-const getMultiplicadorConstante = (seed1, seed2) => {
+const getMultiplicadorConstante = (a, seed) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
 
-  do {
-    let product = seed1 * seed2;
-    let reduced = reduceToFourDigits(product.toString());
+  for (let i = 0; i <= 500; i++) {
+    let pow = a * seed;
+    let reduced = reduceToFourDigits(pow.toString());
     isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      const beautyNumber = `${0}.${reduced}`;
-      resultsObj[reduced] = reduced;
-      resultsArray.push(beautyNumber);
+    const beautyNumber = `${0}.${reduced}`;
 
-      // Switch
-      seed2 = reduced;
+    isRepited = resultsObj.hasOwnProperty(reduced);
+    if (isRepited) {
+      resultsArray.push({ number: beautyNumber, isRepited: true });
+    } else {
+      resultsObj[reduced] = reduced;
+      resultsArray.push({ number: beautyNumber, isRepited: false });
     }
-  } while (isRepited === false);
+
+    seed = reduced;
+  }
+
   return resultsArray;
 };
 
@@ -73,20 +83,22 @@ const getProductosMedios = (seed1, seed2) => {
   let resultsArray = [];
   let isRepited = false;
 
-  do {
+  for (let i = 0; i <= 500; i++) {
     let product = seed1 * seed2;
     let reduced = reduceToFourDigits(product.toString());
-    isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      const beautyNumber = `${0}.${reduced}`;
-      resultsObj[reduced] = reduced;
-      resultsArray.push(beautyNumber);
+    const beautyNumber = `${0}.${reduced}`;
 
-      // Switch
-      seed1 = seed2;
-      seed2 = reduced;
+    isRepited = resultsObj.hasOwnProperty(beautyNumber);
+    if (isRepited) {
+      resultsArray.push({ number: beautyNumber, isRepited: true });
+    } else {
+      resultsObj[beautyNumber] = beautyNumber;
+      resultsArray.push({ number: beautyNumber, isRepited: false });
     }
-  } while (isRepited === false);
+
+    seed1 = seed2;
+    seed2 = reduced;
+  }
   return resultsArray;
 };
 
@@ -94,21 +106,23 @@ const getLineal = (seed1, a, c, mod) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
-
-  console.log({ seed1, a, c, mod });
-  do {
+  //
+  for (let i = 0; i <= 500; i++) {
     let product = (a * seed1 + parseFloat(c)) % mod;
     let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      let beautyNumber = trunc(reduced / (mod - 1), 4);
+    let beautyNumber = trunc(reduced / (mod - 1), 4);
+    if (isRepited) {
+      resultsArray.push({ number: beautyNumber, isRepited: true });
+    } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push(beautyNumber);
-
-      // Switch
-      seed1 = reduced;
+      resultsArray.push({ number: beautyNumber, isRepited: false });
     }
-  } while (isRepited === false);
+
+    // Switch
+    seed1 = reduced;
+  }
+
   return resultsArray;
 };
 
@@ -117,23 +131,26 @@ const getLinealMultiplicativo = (a, seed1, mod) => {
   let resultsArray = [];
   let isRepited = false;
 
-  do {
+  for (let i = 0; i <= 500; i++) {
     let product = (a * seed1) % mod;
     let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      let beautyNumber = trunc(reduced / (mod - 1), 4);
+    let beautyNumber = trunc(reduced / (mod - 1), 4);
+    if (isRepited) {
+      resultsArray.push({ number: beautyNumber, isRepited: true });
+    } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push(beautyNumber);
-
-      // Switch
-      seed1 = reduced;
+      resultsArray.push({ number: beautyNumber, isRepited: false });
     }
-  } while (isRepited === false);
+
+    // Switch
+    seed1 = reduced;
+  }
+
   return resultsArray;
 };
 
-const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
+const getLinealAditivo = (initialNumbers, mod, iterations = 500) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
@@ -145,14 +162,15 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
     const result = trunc(x1_mod / (mod - 1), 4);
 
     isRepited = resultsObj.hasOwnProperty(result);
-    if (!isRepited) {
-      resultsObj[result] = result;
-      initialNumbers.push(x1_mod);
-      resultsArray.push(result);
+
+    if (isRepited) {
+      resultsArray.push({ number: result, isRepited: true });
     } else {
-      console.log("terminado");
-      i = iterations + 1;
+      resultsObj[result] = result;
+      resultsArray.push({ number: result, isRepited: false });
     }
+
+    initialNumbers.push(x1_mod);
   }
 
   return resultsArray;
@@ -163,22 +181,30 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
   let resultsArray = [];
   let isRepited = false;
 
-  do {
+  seed = parseFloat(seed);
+  a = parseFloat(a);
+  b = parseFloat(b);
+  mod = parseFloat(mod);
+
+  for (let i = 0; i <= 500; i++) {
     let seedPow = seed * seed;
-    let part1 = parseFloat(a) * seedPow;
-    let part2 = parseFloat(b) * seed;
-    let product = (part1 + part2 + parseFloat(c)) % mod;
-
+    let part1 = a * seedPow;
+    let part2 = b * seed;
+    let product = (part1 + part2 + c) % mod;
     let reduced = trunc(product, 4);
-    isRepited = resultsObj.hasOwnProperty(reduced);
-    if (!isRepited) {
-      resultsObj[reduced] = reduced;
-      resultsArray.push(reduced);
 
-      // Switch
-      seed = reduced;
+    isRepited = resultsObj.hasOwnProperty(reduced);
+    if (isRepited) {
+      resultsArray.push({ number: reduced, isRepited: true });
+    } else {
+      resultsObj[reduced] = reduced;
+      resultsArray.push({ number: reduced, isRepited: false });
     }
-  } while (isRepited === false);
+
+    // Switch
+    seed = reduced;
+  }
+
   return resultsArray;
 };
 
@@ -250,21 +276,38 @@ const resolveReducer = (method, payload) => {
 };
 
 const getMedia = (array) => {
-  let sumatoria = array.reduce((prev, item, _) => prev + parseFloat(item), 0);
+  let sumatoria = array.reduce(
+    (prev, item, _) => prev + parseFloat(item.number),
+    0
+  );
   let len = array.length - 1;
   let media = sumatoria / len;
   return trunc(media, 2);
 };
 
+const getLifeCycle = (array) => {
+  return array.reduce(
+    (prev, current, _) => (current.isRepited ? prev : prev + 1),
+    0
+  );
+};
+
 const insertData = (data) => {
+  // Data is an array of objects [{},{},{}]
   $dataContainer.innerHTML = "";
 
-  $lifeCycle.textContent = data.length;
+  $lifeCycle.textContent = getLifeCycle(data);
   $media.textContent = getMedia(data);
 
   data.forEach((result, i) => {
     const $div = document.createElement("DIV");
-    $div.innerHTML = `${i + 1}. <span>${result}</span>`;
+    if (result.isRepited) {
+      $div.innerHTML = `${i + 1}. <span>${result.number}</span>`;
+    } else {
+      $div.innerHTML = `${i + 1}. <span class="no-repited">${
+        result.number
+      }</span>`;
+    }
     $dataContainer.append($div);
   });
 };
@@ -408,7 +451,13 @@ addEventListener("DOMContentLoaded", () => {
 setTimeout(updateUI, 100);
 
 const loadChart = (results) => {
-  const items = results.map((item, index) => ({ x: index, y: item, r: 15 }));
+  const noRepitedNumbers = results.filter((item) => !item.isRepited);
+  console.log(noRepitedNumbers);
+  const items = noRepitedNumbers.map((item, index) => ({
+    x: index,
+    y: item.number,
+    r: 15,
+  }));
   myChart.data.datasets[0].data = items;
   myChart.update();
 };
