@@ -158,6 +158,31 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
   return resultsArray;
 };
 
+const getNoLinealCuadratico = (seed, a, b, c, mod) => {
+  let resultsObj = {};
+  let resultsArray = [];
+  let isRepited = false;
+
+  do {
+    let seedPow = seed * seed;
+    let part1 = parseFloat(a) * seedPow;
+    let part2 = parseFloat(b) * seed;
+    let product = (part1 + part2 + parseFloat(c)) % mod;
+
+    let reduced = trunc(product, 4);
+    isRepited = resultsObj.hasOwnProperty(reduced);
+    if (!isRepited) {
+      // let beautyNumber = trunc(reduced / (mod - 1), 4);
+      resultsObj[reduced] = reduced;
+      resultsArray.push(reduced);
+
+      // Switch
+      seed = reduced;
+    }
+  } while (isRepited === false);
+  return resultsArray;
+};
+
 const FourDigitsRegex = /^\d{4}$/;
 
 $btnCalculate.addEventListener("click", () => {
@@ -169,7 +194,6 @@ $btnCalculate.addEventListener("click", () => {
   const seed6 = $inputSeed6.value;
   const seeds = [seed1, seed2, seed3, seed4, seed5, seed6];
 
-  console.log({ seed1, seed2, seed3, seed4 });
   const methodSelected = $selectMethod.value;
 
   if (0 === 0) {
@@ -207,6 +231,16 @@ const resolveReducer = (method, payload) => {
       return getLinealAditivo(
         [payload[0], payload[1], payload[2], payload[3], payload[4]],
         payload[5]
+      );
+    }
+
+    case methods.NO_LINEAL_CUADRATICO: {
+      return getNoLinealCuadratico(
+        payload[0],
+        payload[1],
+        payload[2],
+        payload[3],
+        payload[4]
       );
     }
 
@@ -345,6 +379,22 @@ const updateUI = () => {
       $label5.textContent = "x5";
       $label6.textContent = "M";
       $formula.textContent = "(x1 * xn-1) MOD M";
+      break;
+    }
+
+    case methods.NO_LINEAL_CUADRATICO: {
+      $inputGroup2.style.display = "block";
+      $inputGroup3.style.display = "block";
+      $inputGroup4.style.display = "block";
+      $inputGroup5.style.display = "block";
+      $inputGroup6.style.display = "none";
+
+      $label1.textContent = "x0";
+      $label2.textContent = "a";
+      $label3.textContent = "b";
+      $label4.textContent = "c";
+      $label5.textContent = "M";
+      $formula.textContent = "((a * x0²)+(x0 * b) + c) MOD M";
       break;
     }
   }
