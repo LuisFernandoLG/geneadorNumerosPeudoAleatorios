@@ -5,13 +5,25 @@ const $media = document.querySelector(".media__result");
 const $selectMethod = document.querySelector(".select-method");
 const $inputSeed = document.querySelector(".input__seed");
 const $inputSeed2 = document.querySelector(".input__seed2");
+const $inputSeed3 = document.querySelector(".input__seed3");
+const $inputSeed4 = document.querySelector(".input__seed4");
+const $inputSeed5 = document.querySelector(".input__seed5");
+const $inputSeed6 = document.querySelector(".input__seed6");
 const $lifeCycle = document.querySelector(".life-cycle-text__result");
 const $dataContainer = document.querySelector(".data");
 const $btnCalculate = document.querySelector(".btn-calculate");
 
 const $inputGroup2 = document.querySelector(".input2");
+const $inputGroup3 = document.querySelector(".input3");
+const $inputGroup4 = document.querySelector(".input4");
+const $inputGroup5 = document.querySelector(".input5");
+const $inputGroup6 = document.querySelector(".input6");
 const $label1 = document.querySelector(".input__seed-label1");
 const $label2 = document.querySelector(".input__seed-label2");
+const $label3 = document.querySelector(".input__seed-label3");
+const $label4 = document.querySelector(".input__seed-label4");
+const $label5 = document.querySelector(".input__seed-label5");
+const $label6 = document.querySelector(".input__seed-label6");
 const $canva = document.getElementById("myChart");
 
 let myChart = new Chart($canva, chartConfig);
@@ -78,17 +90,18 @@ const getProductosMedios = (seed1, seed2) => {
   return resultsArray;
 };
 
-const getLineal = (seed1) => {
+const getLineal = (seed1, a, c, mod) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
 
+  console.log({ seed1, a, c, mod });
   do {
-    let product = (21 * seed1 + 15) % 31;
+    let product = (a * seed1 + parseFloat(c)) % mod;
     let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
     if (!isRepited) {
-      let beautyNumber = trunc(reduced / 30, 4);
+      let beautyNumber = trunc(reduced / (mod - 1), 4);
       resultsObj[reduced] = reduced;
       resultsArray.push(beautyNumber);
 
@@ -99,13 +112,12 @@ const getLineal = (seed1) => {
   return resultsArray;
 };
 
-const getLinealMultiplicativo = (a, seed1) => {
+const getLinealMultiplicativo = (a, seed1, mod) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
 
   do {
-    let mod = 32;
     let product = (a * seed1) % mod;
     let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
@@ -128,7 +140,7 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 100) => {
   for (let i = 0; i <= iterations; i++) {
     const num1 = initialNumbers[i];
     const num2 = initialNumbers[initialNumbers.length - 1];
-    let sumatoria = num1 + num2;
+    let sumatoria = parseFloat(num1) + parseFloat(num2);
     const x1_mod = sumatoria % mod;
     const result = x1_mod / (mod - 1);
 
@@ -151,7 +163,13 @@ const FourDigitsRegex = /^\d{4}$/;
 $btnCalculate.addEventListener("click", () => {
   const seed1 = $inputSeed.value;
   const seed2 = $inputSeed2.value;
-  const seeds = [seed1, seed2];
+  const seed3 = $inputSeed3.value;
+  const seed4 = $inputSeed4.value;
+  const seed5 = $inputSeed5.value;
+  const seed6 = $inputSeed6.value;
+  const seeds = [seed1, seed2, seed3, seed4, seed5, seed6];
+
+  console.log({ seed1, seed2, seed3, seed4 });
   const methodSelected = $selectMethod.value;
 
   if (0 === 0) {
@@ -178,15 +196,18 @@ const resolveReducer = (method, payload) => {
     }
 
     case methods.LINEAL: {
-      return getLineal(payload[0]);
+      return getLineal(payload[0], payload[1], payload[2], payload[3]);
     }
 
-    case methods.LINEAL_MULTIPLICATIVO: {
-      return getLinealMultiplicativo(payload[0], payload[1]);
+    case methods.CONGRUENCIAL_MULTIPLICATIVO: {
+      return getLinealMultiplicativo(payload[0], payload[1], payload[2]);
     }
 
-    case methods.LINEAL_ADITIVO: {
-      return getLinealAditivo([65, 89, 98, 3, 69], payload[0]);
+    case methods.CONGRUENCIAL_ADTIVO: {
+      return getLinealAditivo(
+        [payload[0], payload[1], payload[2], payload[3], payload[4]],
+        payload[5]
+      );
     }
 
     default: {
@@ -220,8 +241,9 @@ const methods = {
   PRODUCTOS_MEDIOS: "PRODUCTOS MEDIOS",
   MULTIPLICADOR_CONSTANTE: "MULTIPLICADOR CONSTANTE",
   LINEAL: "LINEAL",
-  LINEAL_MULTIPLICATIVO: "LINEAL MULTIPLICATIVO",
-  LINEAL_ADITIVO: "LINEAL ADITIVO",
+  CONGRUENCIAL_MULTIPLICATIVO: "CONGRUENCIAL MULTIPLICATIVO",
+  CONGRUENCIAL_ADTIVO: "CONGRUENCIAL ADITIVO",
+  NO_LINEAL_CUADRATICO: "NO LINEAL CUADRATICO",
 };
 
 const loadMethodsToSelect = () => {
@@ -240,6 +262,11 @@ const updateUI = () => {
   switch (methodOption) {
     case methods.CUADRADOS_MEDIOS: {
       $inputGroup2.style.display = "none";
+      $inputGroup3.style.display = "none";
+      $inputGroup4.style.display = "none";
+      $inputGroup5.style.display = "none";
+      $inputGroup6.style.display = "none";
+
       $label1.textContent = "x0";
       $formula.textContent = "(x0)²";
       break;
@@ -247,6 +274,11 @@ const updateUI = () => {
 
     case methods.PRODUCTOS_MEDIOS: {
       $inputGroup2.style.display = "block";
+      $inputGroup3.style.display = "none";
+      $inputGroup4.style.display = "none";
+      $inputGroup5.style.display = "none";
+      $inputGroup6.style.display = "none";
+
       $label1.textContent = "x0";
       $label2.textContent = "x1";
       $formula.textContent = "(x0) x (x1)";
@@ -255,6 +287,12 @@ const updateUI = () => {
 
     case methods.MULTIPLICADOR_CONSTANTE: {
       $inputGroup2.style.display = "block";
+
+      $inputGroup3.style.display = "none";
+      $inputGroup4.style.display = "none";
+      $inputGroup5.style.display = "none";
+      $inputGroup6.style.display = "none";
+
       $label1.textContent = "a";
       $label2.innerHTML = "x0";
       $formula.textContent = "(a) x (x0)";
@@ -262,26 +300,51 @@ const updateUI = () => {
     }
 
     case methods.LINEAL: {
-      $inputGroup2.style.display = "none";
+      // $inputGroup1.style.display = "block";
+      $inputGroup2.style.display = "block";
+      $inputGroup3.style.display = "block";
+      $inputGroup4.style.display = "block";
+      $inputGroup5.style.display = "none";
+      $inputGroup6.style.display = "none";
+
       $label1.textContent = "x0";
-      $formula.textContent = "(21 * x0 + 15) MOD 31";
+      $label2.textContent = "a";
+      $label3.textContent = "c";
+      $label4.textContent = "M";
+      $formula.textContent = "(a * x0 + c) MOD M";
       break;
     }
 
-    case methods.LINEAL_MULTIPLICATIVO: {
+    case methods.CONGRUENCIAL_MULTIPLICATIVO: {
       $inputGroup2.style.display = "block";
+      $inputGroup3.style.display = "block";
+
+      $inputGroup4.style.display = "none";
+      $inputGroup5.style.display = "none";
+      $inputGroup6.style.display = "none";
+
       $label1.textContent = "a";
       $label2.textContent = "x0";
-      $formula.textContent = "(a * x0) MOD 32";
+      $label3.textContent = "m";
+      $formula.textContent = "(a * x0) MOD m";
 
       break;
     }
 
-    case methods.LINEAL_ADITIVO: {
-      $inputGroup2.style.display = "none";
-      $label1.textContent = "M";
-      $formula.textContent =
-        "[x1:65, x2:89, x3:98, x4:3, x5:69]    (x1 * xn-1) MOD M";
+    case methods.CONGRUENCIAL_ADTIVO: {
+      $inputGroup2.style.display = "block";
+      $inputGroup3.style.display = "block";
+      $inputGroup4.style.display = "block";
+      $inputGroup5.style.display = "block";
+      $inputGroup6.style.display = "block";
+
+      $label1.textContent = "x1";
+      $label2.textContent = "x2";
+      $label3.textContent = "x3";
+      $label4.textContent = "x4";
+      $label5.textContent = "x5";
+      $label6.textContent = "M";
+      $formula.textContent = "(x1 * xn-1) MOD M";
       break;
     }
   }
