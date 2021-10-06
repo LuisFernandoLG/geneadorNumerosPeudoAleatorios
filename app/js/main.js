@@ -2,6 +2,7 @@ import { reduceToFourDigits, trunc, chartConfig } from "./utils/utils.js";
 
 const $formula = document.querySelector(".formula");
 const $media = document.querySelector(".media__result");
+const $mediaNoRepited = document.querySelector(".media__result-no-repited");
 const $selectMethod = document.querySelector(".select-method");
 const $inputSeed = document.querySelector(".input__seed");
 const $inputSeed2 = document.querySelector(".input__seed2");
@@ -285,6 +286,18 @@ const getMedia = (array) => {
   return trunc(media, 2);
 };
 
+const getMediaNoRepited = (array) => {
+  const noRepitedNumbers = array.filter((item) => !item.isRepited);
+  let sumatoria = noRepitedNumbers.reduce(
+    (prev, item, _) => prev + parseFloat(item.number),
+    0
+  );
+
+  let len = noRepitedNumbers.length - 1;
+  let media = sumatoria / len;
+  return trunc(media, 2);
+};
+
 const getLifeCycle = (array) => {
   return array.reduce(
     (prev, current, _) => (current.isRepited ? prev : prev + 1),
@@ -298,6 +311,7 @@ const insertData = (data) => {
 
   $lifeCycle.textContent = getLifeCycle(data);
   $media.textContent = getMedia(data);
+  $mediaNoRepited.textContent = getMediaNoRepited(data);
 
   data.forEach((result, i) => {
     const $div = document.createElement("DIV");

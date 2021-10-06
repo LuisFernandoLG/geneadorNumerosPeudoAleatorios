@@ -144,12 +144,16 @@ body {
   border-radius: 0.5rem;
 }
 
-.repite .footer {
+.footer {
   width: 100%;
   padding: 1rem;
   text-align: center;
   background: #93b5c6;
   color: #fff;
+}
+
+.media-no-repited {
+  margin: 0 3rem;
 }
 
 .life-cycle-text {
