@@ -209,7 +209,7 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
   return resultsArray;
 };
 
-const FourDigitsRegex = /^\d{4}$/;
+const numberRegex = /^[+-]?([0-9]+\.?[0-9]*|\.[0-9]+)$/;
 
 $btnCalculate.addEventListener("click", () => {
   const seed1 = $inputSeed.value;
@@ -222,7 +222,15 @@ $btnCalculate.addEventListener("click", () => {
 
   const methodSelected = $selectMethod.value;
 
-  if (0 === 0) {
+  let isFieldValid =
+    numberRegex.test(seed1) ||
+    numberRegex.test(seed2) ||
+    numberRegex.test(seed3) ||
+    numberRegex.test(seed4) ||
+    numberRegex.test(seed5) ||
+    numberRegex.test(seed6);
+
+  if (isFieldValid) {
     const results = resolveReducer(methodSelected, seeds);
     insertData(results);
     loadChart(results);
