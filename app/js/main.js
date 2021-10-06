@@ -85,7 +85,7 @@ const getLineal = (seed1) => {
 
   do {
     let product = (21 * seed1 + 15) % 31;
-    let reduced = reduceToFourDigits(product.toString());
+    let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
     if (!isRepited) {
       let beautyNumber = trunc(reduced / 30, 4);
@@ -107,7 +107,7 @@ const getLinealMultiplicativo = (a, seed1) => {
   do {
     let mod = 32;
     let product = (a * seed1) % mod;
-    let reduced = reduceToFourDigits(product.toString());
+    let reduced = trunc(product, 4);
     isRepited = resultsObj.hasOwnProperty(reduced);
     if (!isRepited) {
       let beautyNumber = trunc(reduced / (mod - 1), 4);
