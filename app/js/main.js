@@ -34,23 +34,33 @@ const getCuadradosMedios = (num) => {
   let resultsArray = [];
   let isRepited = false;
 
-  for (let i = 0; i <= 500; i++) {
+  for (let i = 0; i < 500; i++) {
+    // Aplicamos la fórmula
     let pow = num * num;
+
+    // Reducimos a 4 digitos
     let reduced = reduceToFourDigits(pow.toString());
+
+    //Comprobamos que no exista en nuestro objeto (hash)
     isRepited = resultsObj.hasOwnProperty(reduced);
+
+    // Agregamos el 0.
     const beautyNumber = `${0}.${reduced}`;
 
-    isRepited = resultsObj.hasOwnProperty(reduced);
+    // Si está repetido lo agregamos al arreglo
     if (isRepited) {
       resultsArray.push({ number: beautyNumber, isRepited: true });
     } else {
+      // Si no está repetido lo agregamos al hash y al arreglo
       resultsObj[reduced] = reduced;
       resultsArray.push({ number: beautyNumber, isRepited: false });
     }
 
+    // Actualizamos la semilla
     num = reduced;
   }
 
+  // Devolvemos el arreglo con los resultados
   return resultsArray;
 };
 
@@ -59,23 +69,34 @@ const getMultiplicadorConstante = (a, seed) => {
   let resultsArray = [];
   let isRepited = false;
 
-  for (let i = 0; i <= 500; i++) {
+  // Declaramos un for
+  for (let i = 0; i < 500; i++) {
+    // Aplicamos el método
     let pow = a * seed;
+
+    // Reducimos la cantidad de números a 4
     let reduced = reduceToFourDigits(pow.toString());
-    isRepited = resultsObj.hasOwnProperty(reduced);
+
+    // Agregamos el "0."
     const beautyNumber = `${0}.${reduced}`;
 
+    // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(reduced);
+
+    // En caso de que esté repetido lo guardamos
     if (isRepited) {
       resultsArray.push({ number: beautyNumber, isRepited: true });
     } else {
+      // En caso de que no esté repetido, igual lo guardamos pero con un fale en la propiedad isRepited
       resultsObj[reduced] = reduced;
       resultsArray.push({ number: beautyNumber, isRepited: false });
     }
 
+    // Actualizamos la semilla
     seed = reduced;
   }
 
+  // Regresamos el arreglo
   return resultsArray;
 };
 
@@ -84,22 +105,34 @@ const getProductosMedios = (seed1, seed2) => {
   let resultsArray = [];
   let isRepited = false;
 
-  for (let i = 0; i <= 500; i++) {
+  // Iniciamos un for
+  for (let i = 0; i < 500; i++) {
+    // Aplicamos el método
     let product = seed1 * seed2;
+
+    //Reducimos el número a 4 digitos
     let reduced = reduceToFourDigits(product.toString());
+
+    //Agregamos "0. a la izquierda"
     const beautyNumber = `${0}.${reduced}`;
 
+    // Comprobamos si el número está repetido
     isRepited = resultsObj.hasOwnProperty(beautyNumber);
     if (isRepited) {
+      // en CASO de estár reptido, lo agregamos al arreglo y especificamos que el valor está repetido
       resultsArray.push({ number: beautyNumber, isRepited: true });
     } else {
+      // en CASO de NO estár reptido, lo agregamos al arreglo y especificamos que el valor NO está repetido
       resultsObj[beautyNumber] = beautyNumber;
       resultsArray.push({ number: beautyNumber, isRepited: false });
     }
 
+    // Actualizamos ambas semilllas
     seed1 = seed2;
     seed2 = reduced;
   }
+
+  // Devolvemos el arreglos con los resultados
   return resultsArray;
 };
 
@@ -107,12 +140,22 @@ const getLineal = (seed1, a, c, mod) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
-  //
-  for (let i = 0; i <= 500; i++) {
+
+  // Iniciamos ciclo for
+  for (let i = 0; i < 500; i++) {
+    // Aplicamos el método
     let product = (a * seed1 + parseFloat(c)) % mod;
+
+    // Truncamos a 4 decimales ya que sin truncar salen demasiados decimales
     let reduced = trunc(product, 4);
+
+    // Comprobamos que no esté repetido.
     isRepited = resultsObj.hasOwnProperty(reduced);
+
+    // Aplicamos 2da parte del método
     let beautyNumber = trunc(reduced / (mod - 1), 4);
+
+    // Dependiendo si está repetido o no, lo agregamos al arreglo
     if (isRepited) {
       resultsArray.push({ number: beautyNumber, isRepited: true });
     } else {
@@ -121,9 +164,11 @@ const getLineal = (seed1, a, c, mod) => {
     }
 
     // Switch
+    //  Hacemos la actualización de la semilla.
     seed1 = reduced;
   }
 
+  // Devolvemos el arreglos
   return resultsArray;
 };
 
@@ -132,11 +177,21 @@ const getLinealMultiplicativo = (a, seed1, mod) => {
   let resultsArray = [];
   let isRepited = false;
 
-  for (let i = 0; i <= 500; i++) {
+  // Iniciamos el ciclor for
+  for (let i = 0; i < 500; i++) {
+    // Aplicamos la primera parte del método
     let product = (a * seed1) % mod;
+
+    // Truncamos el número
     let reduced = trunc(product, 4);
+
+    // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(reduced);
+
+    // Aplicamos segunda parte del método
     let beautyNumber = trunc(reduced / (mod - 1), 4);
+
+    // Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
       resultsArray.push({ number: beautyNumber, isRepited: true });
     } else {
@@ -145,9 +200,11 @@ const getLinealMultiplicativo = (a, seed1, mod) => {
     }
 
     // Switch
+    // Actualizamos la semilla
     seed1 = reduced;
   }
 
+  // Devolvemos el arreglos con los números
   return resultsArray;
 };
 
@@ -155,15 +212,28 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 500) => {
   let resultsObj = {};
   let resultsArray = [];
   let isRepited = false;
+
+  // Iniciamos el ciclor FOR
   for (let i = 0; i <= iterations; i++) {
+    // Obtenemos el valor al inicio del arreglo
     const num1 = initialNumbers[i];
+
+    // Obtenemos el valor final del arreglo
     const num2 = initialNumbers[initialNumbers.length - 1];
+
+    // Realizamos la sumatoria
     let sumatoria = parseFloat(num1) + parseFloat(num2);
+
+    // Aplicamos el mod
     const x1_mod = sumatoria % mod;
+
+    // Truncamos el resultado a 4 digitos
     const result = trunc(x1_mod / (mod - 1), 4);
 
+    // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(result);
 
+    // Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
       resultsArray.push({ number: result, isRepited: true });
     } else {
@@ -171,9 +241,11 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 500) => {
       resultsArray.push({ number: result, isRepited: false });
     }
 
+    // Agregamos el valor generado al final del arreglo
     initialNumbers.push(x1_mod);
   }
 
+  // Devolvemos el arreglo con los resultadso
   return resultsArray;
 };
 
@@ -182,19 +254,30 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
   let resultsArray = [];
   let isRepited = false;
 
+  // Convertimos a float los datos
   seed = parseFloat(seed);
   a = parseFloat(a);
   b = parseFloat(b);
+  c = parseFloat(c);
   mod = parseFloat(mod);
 
-  for (let i = 0; i <= 500; i++) {
+  // Iniciamos el ciclor FOR
+  for (let i = 0; i < 500; i++) {
+    // Dividimos el método en varios pasos
     let seedPow = seed * seed;
     let part1 = a * seedPow;
     let part2 = b * seed;
+
+    // Sumamos los datos y obtenemos el residuo
     let product = (part1 + part2 + c) % mod;
+
+    // Truncamos el resultado a 4 digitos
     let reduced = trunc(product, 4);
 
+    // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(reduced);
+
+    /// Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
       resultsArray.push({ number: reduced, isRepited: true });
     } else {
@@ -202,10 +285,12 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
       resultsArray.push({ number: reduced, isRepited: false });
     }
 
-    // Switch
+    // Switch,
+    // Actualizamos la semilla
     seed = reduced;
   }
 
+  // Devolvemos el arreglo
   return resultsArray;
 };
 

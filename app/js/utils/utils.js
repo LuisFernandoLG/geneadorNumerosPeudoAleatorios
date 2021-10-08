@@ -8,7 +8,10 @@ const addZeroLeft = (number) => {
 };
 
 const reduceToFourDigits = (number) => {
+  // arreglamos la longitud del número agregando un cero
   let numberFixed = isLenEven(number) ? number : addZeroLeft(number);
+
+  // Extraemos el centro del número, reduciendolo a 4 digitos
   while (numberFixed.length > 4) {
     numberFixed = numberFixed.substring(1, numberFixed.length - 1);
   }
@@ -17,7 +20,6 @@ const reduceToFourDigits = (number) => {
 
 function trunc(x, posiciones = 0) {
   var s = x.toString();
-  var l = s.length;
   var decimalLength = s.indexOf(".") + 1;
   var numStr = s.substr(0, decimalLength + posiciones);
   return Number(numStr);
