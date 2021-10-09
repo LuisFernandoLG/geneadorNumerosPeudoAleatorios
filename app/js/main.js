@@ -49,11 +49,15 @@ const getCuadradosMedios = (num) => {
 
     // Si está repetido lo agregamos al arreglo
     if (isRepited) {
-      resultsArray.push({ number: beautyNumber, isRepited: true });
+      resultsArray.push({ number: beautyNumber, isRepited: true, xn: reduced });
     } else {
       // Si no está repetido lo agregamos al hash y al arreglo
       resultsObj[reduced] = reduced;
-      resultsArray.push({ number: beautyNumber, isRepited: false });
+      resultsArray.push({
+        number: beautyNumber,
+        isRepited: false,
+        xn: reduced,
+      });
     }
 
     // Actualizamos la semilla
@@ -85,11 +89,15 @@ const getMultiplicadorConstante = (a, seed) => {
 
     // En caso de que esté repetido lo guardamos
     if (isRepited) {
-      resultsArray.push({ number: beautyNumber, isRepited: true });
+      resultsArray.push({ number: beautyNumber, isRepited: true, xn: reduced });
     } else {
       // En caso de que no esté repetido, igual lo guardamos pero con un fale en la propiedad isRepited
       resultsObj[reduced] = reduced;
-      resultsArray.push({ number: beautyNumber, isRepited: false });
+      resultsArray.push({
+        number: beautyNumber,
+        isRepited: false,
+        xn: reduced,
+      });
     }
 
     // Actualizamos la semilla
@@ -120,11 +128,15 @@ const getProductosMedios = (seed1, seed2) => {
     isRepited = resultsObj.hasOwnProperty(beautyNumber);
     if (isRepited) {
       // en CASO de estár reptido, lo agregamos al arreglo y especificamos que el valor está repetido
-      resultsArray.push({ number: beautyNumber, isRepited: true });
+      resultsArray.push({ number: beautyNumber, isRepited: true, xn: reduced });
     } else {
       // en CASO de NO estár reptido, lo agregamos al arreglo y especificamos que el valor NO está repetido
       resultsObj[beautyNumber] = beautyNumber;
-      resultsArray.push({ number: beautyNumber, isRepited: false });
+      resultsArray.push({
+        number: beautyNumber,
+        isRepited: false,
+        xn: reduced,
+      });
     }
 
     // Actualizamos ambas semilllas
@@ -144,10 +156,7 @@ const getLineal = (seed1, a, c, mod) => {
   // Iniciamos ciclo for
   for (let i = 0; i < 500; i++) {
     // Aplicamos el método
-    let product = (a * seed1 + parseFloat(c)) % mod;
-
-    // Truncamos a 4 decimales ya que sin truncar salen demasiados decimales
-    let reduced = trunc(product, 4);
+    let reduced = (a * seed1 + parseFloat(c)) % mod;
 
     // Comprobamos que no esté repetido.
     isRepited = resultsObj.hasOwnProperty(reduced);
@@ -157,10 +166,14 @@ const getLineal = (seed1, a, c, mod) => {
 
     // Dependiendo si está repetido o no, lo agregamos al arreglo
     if (isRepited) {
-      resultsArray.push({ number: beautyNumber, isRepited: true });
+      resultsArray.push({ number: beautyNumber, isRepited: true, xn: reduced });
     } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push({ number: beautyNumber, isRepited: false });
+      resultsArray.push({
+        number: beautyNumber,
+        isRepited: false,
+        xn: reduced,
+      });
     }
 
     // Switch
@@ -180,10 +193,7 @@ const getLinealMultiplicativo = (a, seed1, mod) => {
   // Iniciamos el ciclor for
   for (let i = 0; i < 500; i++) {
     // Aplicamos la primera parte del método
-    let product = (a * seed1) % mod;
-
-    // Truncamos el número
-    let reduced = trunc(product, 4);
+    let reduced = (a * seed1) % mod;
 
     // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(reduced);
@@ -193,10 +203,14 @@ const getLinealMultiplicativo = (a, seed1, mod) => {
 
     // Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
-      resultsArray.push({ number: beautyNumber, isRepited: true });
+      resultsArray.push({ number: beautyNumber, isRepited: true, xn: reduced });
     } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push({ number: beautyNumber, isRepited: false });
+      resultsArray.push({
+        number: beautyNumber,
+        isRepited: false,
+        xn: reduced,
+      });
     }
 
     // Switch
@@ -235,10 +249,10 @@ const getLinealAditivo = (initialNumbers, mod, iterations = 500) => {
 
     // Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
-      resultsArray.push({ number: result, isRepited: true });
+      resultsArray.push({ number: result, isRepited: true, xn: x1_mod });
     } else {
       resultsObj[result] = result;
-      resultsArray.push({ number: result, isRepited: false });
+      resultsArray.push({ number: result, isRepited: false, xn: x1_mod });
     }
 
     // Agregamos el valor generado al final del arreglo
@@ -269,20 +283,17 @@ const getNoLinealCuadratico = (seed, a, b, c, mod) => {
     let part2 = b * seed;
 
     // Sumamos los datos y obtenemos el residuo
-    let product = (part1 + part2 + c) % mod;
-
-    // Truncamos el resultado a 4 digitos
-    let reduced = trunc(product, 4);
+    let reduced = (part1 + part2 + c) % mod;
 
     // Comprobamos si está repetido
     isRepited = resultsObj.hasOwnProperty(reduced);
 
     /// Dependiendo si el número está repetido lo guardaremos con distintos valores en la propiedad isRepited
     if (isRepited) {
-      resultsArray.push({ number: reduced, isRepited: true });
+      resultsArray.push({ number: reduced, isRepited: true, xn: reduced });
     } else {
       resultsObj[reduced] = reduced;
-      resultsArray.push({ number: reduced, isRepited: false });
+      resultsArray.push({ number: reduced, isRepited: false, xn: reduced });
     }
 
     // Switch,
@@ -399,7 +410,6 @@ const getLifeCycle = (array) => {
 };
 
 const insertData = (data) => {
-  // Data is an array of objects [{},{},{}]
   $dataContainer.innerHTML = "";
 
   $lifeCycle.textContent = getLifeCycle(data);
@@ -408,12 +418,19 @@ const insertData = (data) => {
 
   data.forEach((result, i) => {
     const $div = document.createElement("DIV");
+    $div.classList.add("result-container");
     if (result.isRepited) {
-      $div.innerHTML = `${i + 1}. <span>${result.number}</span>`;
+      $div.innerHTML = `<span class="number">${i + 1}</span>
+      <div> 
+      <p class="seed">Semilla:<span> ${result.xn}</span></p>
+      <p class="pseudo">r:<span> ${result.number}</span></p>
+      </div>`;
     } else {
-      $div.innerHTML = `${i + 1}. <span class="no-repited">${
-        result.number
-      }</span>`;
+      $div.innerHTML = `<span class="number">${i + 1}<span>
+      <div> 
+      <p class="seed">Semilla:<span> ${result.xn}</span></p>
+      <p class="pseudo">r:<span class="no-repited"> ${result.number}</span></p>
+      </div>`;
     }
     $dataContainer.append($div);
   });

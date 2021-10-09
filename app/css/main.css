@@ -78,12 +78,12 @@ button {
   border-radius: 1rem;
   display: -ms-grid;
   display: grid;
-  -ms-grid-columns: (minmax(150px, 1fr))[auto-fill];
-      grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  -ms-grid-columns: (minmax(200px, 1fr))[auto-fill];
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   overflow-y: scroll;
 }
 
-.data div {
+.data .result-container {
   background: #fff;
   color: #c0b8b8;
   font-weight: 500;
@@ -93,13 +93,50 @@ button {
   margin: 1rem;
   padding: 1rem;
   border-radius: 0.5rem;
-  -webkit-box-shadow: 5px 5px 25px #27272754;
-          box-shadow: 5px 5px 25px #27272754;
+  -webkit-box-shadow: 0.3125rem 0.3125rem 1.25rem #27272754;
+          box-shadow: 0.3125rem 0.3125rem 1.25rem #27272754;
+  -webkit-transform: scale(1);
+          transform: scale(1);
+  -webkit-transition: -webkit-transform 0.3s ease;
+  transition: -webkit-transform 0.3s ease;
+  transition: transform 0.3s ease;
+  transition: transform 0.3s ease, -webkit-transform 0.3s ease;
+  cursor: pointer;
 }
 
-.data div .no-repited {
+.data .result-container:hover {
+  -webkit-transform: scale(1.15);
+          transform: scale(1.15);
+  -webkit-box-shadow: 0.3125rem 0.3125rem 0.9375rem #ff6384;
+          box-shadow: 0.3125rem 0.3125rem 0.9375rem #ff6384;
+}
+
+.data .result-container .number {
+  height: 100%;
+}
+
+.data .result-container div .pseudo .no-repited {
   font-weight: 600;
   color: #ff6384;
+}
+
+.data .result-container div .seed,
+.data .result-container div .pseudo {
+  margin: 0.2rem 0;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
+.data .result-container div .seed span,
+.data .result-container div .pseudo span {
+  margin-left: 0.5rem;
 }
 
 .chart {
