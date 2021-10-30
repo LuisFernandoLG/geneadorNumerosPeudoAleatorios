@@ -18,6 +18,7 @@
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
+  z-index: 100;
   padding: 1rem 2rem;
   background: #93b5c6;
   top: 0;
@@ -150,6 +151,18 @@ button {
   border: none;
   outline: none;
   cursor: pointer;
+}
+
+.verifications p {
+  background: #fff;
+  border-radius: 1rem;
+  width: -webkit-max-content;
+  width: -moz-max-content;
+  width: max-content;
+  padding: 1rem;
+  -webkit-box-shadow: 0 0 40px -10px #272727;
+          box-shadow: 0 0 40px -10px #272727;
+  margin: 2rem 0;
 }
 
 h1 {

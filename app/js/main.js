@@ -1,6 +1,7 @@
 import { reduceToFourDigits, trunc, chartConfig } from "./utils/utils.js";
 
 const $formula = document.querySelector(".formula");
+const $verifications = document.querySelector(".verifications");
 const $media = document.querySelector(".media__result");
 const $mediaNoRepited = document.querySelector(".media__result-no-repited");
 const $selectMethod = document.querySelector(".select-method");
@@ -329,11 +330,27 @@ $btnCalculate.addEventListener("click", () => {
   if (isFieldValid) {
     const results = resolveReducer(methodSelected, seeds);
     insertData(results);
+    insertVerifications(results);
     loadChart(results);
   } else {
     alert("semilla invalida!!!");
   }
 });
+
+const filterRepitedNumbers = (numbers) => {
+  let array = [];
+  let obj = {};
+
+  numbers.forEach(({ number }) => {
+    if (obj.hasOwnProperty(number)) {
+    } else {
+      obj[number] = number;
+      array.push(parseFloat(number));
+    }
+  });
+
+  return array;
+};
 
 const resolveReducer = (method, payload) => {
   switch (method) {
@@ -385,7 +402,7 @@ const getMedia = (array) => {
     (prev, item, _) => prev + parseFloat(item.number),
     0
   );
-  let len = array.length - 1;
+  let len = array.length;
   let media = sumatoria / len;
   return trunc(media, 2);
 };
@@ -397,7 +414,7 @@ const getMediaNoRepited = (array) => {
     0
   );
 
-  let len = noRepitedNumbers.length - 1;
+  let len = noRepitedNumbers.length;
   let media = sumatoria / len;
   return trunc(media, 2);
 };
@@ -576,7 +593,6 @@ setTimeout(updateUI, 100);
 
 const loadChart = (results) => {
   const noRepitedNumbers = results.filter((item) => !item.isRepited);
-  console.log(noRepitedNumbers);
   const items = noRepitedNumbers.map((item, index) => ({
     x: index,
     y: item.number,
@@ -585,3 +601,154 @@ const loadChart = (results) => {
   myChart.data.datasets[0].data = items;
   myChart.update();
 };
+
+const getMediaX = (numbers) => {
+  const sumatoria = numbers.reduce((prev, item, _) => prev + item, 0);
+  const len = numbers.length;
+  return sumatoria / len;
+};
+
+const getVarianza = (numbers) => {
+  const len = numbers.length;
+  const media = getMediaX(numbers);
+  const sumatoria = numbers.reduce(
+    (prev, item, _) => prev + (item - media) * (item - media),
+    0
+  );
+
+  return sumatoria / len;
+};
+
+const applyChi2 = (numbers) => {
+  let range1 = [];
+  let range2 = [];
+  let range3 = [];
+  let range4 = [];
+  let range5 = [];
+  let range6 = [];
+  let range7 = [];
+  let range8 = [];
+  let range9 = [];
+  let range10 = [];
+
+  const n = numbers.length;
+  const m = Math.sqrt(n);
+
+  // Range 1
+  numbers.forEach((num) => {
+    if (num >= 0 && num < 0.1) range1.push(num);
+    if (num >= 0.1 && num < 0.2) range2.push(num);
+    if (num >= 0.2 && num < 0.3) range3.push(num);
+    if (num >= 0.3 && num < 0.4) range4.push(num);
+    if (num >= 0.4 && num < 0.5) range5.push(num);
+    if (num >= 0.5 && num < 0.6) range6.push(num);
+    if (num >= 0.6 && num < 0.7) range7.push(num);
+    if (num >= 0.7 && num < 0.8) range8.push(num);
+    if (num >= 0.8 && num < 0.9) range9.push(num);
+    if (num >= 0.9 && num <= 1) range10.push(num);
+  });
+
+  const ranges = [
+    range1,
+    range2,
+    range3,
+    range4,
+    range5,
+    range6,
+    range7,
+    range8,
+    range9,
+    range10,
+  ];
+
+  const chi2 = ranges.reduce((prev, range, _) => {
+    const oi = range.length;
+    const ei = m;
+    let x = ((ei - oi) * (ei - oi)) / ei;
+    return prev + x;
+  }, 0);
+
+  return chi2;
+};
+
+const insertVarianza = (numbers) => {
+  const vari = getVarianza(numbers);
+  const $div = document.createElement("DIV");
+  $div.innerHTML = `<p>Varianza: <span>${vari}</span></p>`;
+  $div.classList.add("varianza");
+  $verifications.append($div);
+};
+
+const insertChi2 = (numbers) => {
+  const chi2 = applyChi2(numbers);
+  const $div = document.createElement("DIV");
+  $div.innerHTML = `<p>Chi2: <span>${chi2}</span></p>`;
+  $div.classList.add("chi2");
+  $verifications.append($div);
+};
+
+const insertPromedio = (numbers) => {
+  const media = getMediaX(numbers);
+  const $div = document.createElement("DIV");
+  $div.innerHTML = `<p>Media: <span>${media}</span></p>`;
+  $div.classList.add("promedio");
+  $verifications.append($div);
+};
+
+const insertCorridas = (numbers) => {
+  const { bits, corridas, z } = corridasAbajoArriba(numbers);
+  const media = getMediaX(numbers);
+  const $div = document.createElement("DIV");
+  $div.innerHTML = `<p>
+  CORRIDAS arriba y abajo
+  <br>
+  Bits: <span>${bits}</span>
+  <br>
+  Corridas: <span>${corridas}</span>
+  <br>
+  Z: <span>${z}</span>
+  </p>`;
+  $div.classList.add("corridas");
+  $verifications.append($div);
+};
+
+const insertVerifications = (results) => {
+  const unrepitedNumbers = filterRepitedNumbers(results);
+
+  $verifications.innerHTML = "";
+  insertPromedio(unrepitedNumbers);
+  insertVarianza(unrepitedNumbers);
+  insertChi2(unrepitedNumbers);
+  insertCorridas(unrepitedNumbers);
+};
+
+const corridasAbajoArriba = (numbers) => {
+  let bits = [];
+  for (let i = 1; i < numbers.length; i++) {
+    if (numbers[i] <= numbers[i - 1]) {
+      bits.push(0);
+    } else {
+      bits.push(1);
+    }
+  }
+
+  let corridas = 1;
+  //Comenzamos observando el primer dígito
+  let dato = bits[0];
+  //Comparamos cada dígito con el observado, cuando cambia es
+  //una nueva corrida
+  for (let i = 1; i < bits.length; i++) {
+    if (bits[i] !== dato) {
+      corridas++;
+      dato = bits[i];
+    }
+  }
+
+  const media = (2 * numbers.length - 1) / 3;
+  const varianza = (16 * numbers.length - 29) / 90;
+
+  const z = Math.abs((corridas - media) / Math.sqrt(varianza));
+  return { corridas, bits, z };
+};
+
+corridasAbajoArriba(numForCorridas);

@@ -15,7 +15,8 @@ const reduceToFourDigits = (number) => {
   while (numberFixed.length > 4) {
     numberFixed = numberFixed.substring(1, numberFixed.length - 1);
   }
-  return numberFixed;
+
+  return numberFixed === "00" ? "0000" : numberFixed;
 };
 
 function trunc(x, posiciones = 0) {
