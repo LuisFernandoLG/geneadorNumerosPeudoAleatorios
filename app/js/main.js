@@ -686,6 +686,198 @@ const insertChi2 = (numbers) => {
   $div.classList.add("chi2");
   $verifications.append($div);
 };
+const pruebaHuecos = (interval1, interval2, numbers) => {
+  const isInRange = (number) => number >= interval1 && number <= interval2;
+
+  const huecos = numbers.map((num) => (isInRange(num) ? 1 : 0));
+
+  const sizes = [];
+  let counter = 0;
+  let prev = null;
+  huecos.forEach((num) => {
+    if (num === 0) counter++;
+    else if (prev !== null) {
+      if (prev !== 1) {
+        sizes.push(counter);
+        counter = 0;
+      } else {
+        sizes.push(0);
+      }
+    }
+
+    prev = num;
+  });
+
+  let sizes0 = 0;
+  let sizes1 = 0;
+  let sizes2 = 0;
+  let sizes3 = 0;
+  let sizes4 = 0;
+  let sizes5 = 0;
+
+  sizes.forEach((size) => {
+    if (size === 0) sizes0++;
+    if (size === 1) sizes1++;
+    if (size === 2) sizes2++;
+    if (size === 3) sizes3++;
+    if (size === 4) sizes4++;
+    if (size >= 5) sizes5++;
+  });
+
+  const h = sizes.length;
+
+  const sizesWaited = [sizes0, sizes1, sizes2, sizes3, sizes4, sizes5];
+
+  const huecosResult = sizesWaited.reduce((prev, size, index) => {
+    let ei = 0;
+
+    if (index == 5) ei = h * Math.pow(1 - (interval2 - interval1), index);
+    else
+      ei =
+        h *
+        (interval2 - interval1) *
+        Math.pow(1 - (interval2 - interval1), index);
+    return prev + Math.pow(ei - size, 2) / ei;
+  }, 0);
+
+  return { huecos, sizes, huecosResult };
+};
+
+const pruebaPoker = (numbers) => {
+  // Comprueba que los números tengan más de 3 y menos de 5 decimales
+  console.log(numbers[0].toString().length);
+
+  // únicamente numeros de 3 digitos
+  const isDecimalOkay = numbers.every(
+    (item) =>
+      item !== "1" && item.toString().length >= 3 && item.toString().length <= 6
+  );
+
+  if (!isDecimalOkay) return "Los números no cumplen con 4 digitos";
+
+  const getRepititions = (number) => {
+    const numberStr = number.toString();
+    const strArray = numberStr.split("");
+    let obj = {};
+
+    strArray.forEach((number, index) => {
+      if (index === 0 || index === 1) return false;
+      if (obj.hasOwnProperty(number)) obj[number] = obj[number] + 1;
+      else obj[number] = 1;
+    });
+
+    return obj;
+  };
+
+  const isType = (number) => {
+    const data = getRepititions(number);
+    console.log(data);
+    const dataArray = Object.values(data);
+
+    if (dataArray.length === 4) return "TD";
+    if (dataArray.length === 3) return "1P";
+    if (dataArray.length === 1) return "PK";
+
+    if (dataArray[0] === 2 && dataArray[1] === 2) return "2P";
+    else return "T";
+  };
+
+  const tdProbability = 0.504;
+  const _1pProbability = 0.432;
+  const _2pProbability = 0.027;
+  const tProbability = 0.036;
+  const pokerProbability = 0.001;
+
+  let types = numbers.map((number) => isType(number));
+  let n = numbers.length;
+
+  let numOfTD = types.reduce(
+    (prev, item, _) => (item === "TD" ? prev + 1 : prev),
+    0
+  );
+  const sum1 = (Math.pow(tdProbability * n - numOfTD), 2) / (tdProbability * n);
+
+  let numOf1p = types.reduce(
+    (prev, item, _) => (item === "1P" ? prev + 1 : prev),
+    0
+  );
+  const sum2 =
+    (Math.pow(_1pProbability * n - numOf1p), 2) / (_1pProbability * n);
+
+  let numOf2p = types.reduce(
+    (prev, item, _) => (item === "2P" ? prev + 1 : prev),
+    0
+  );
+  const sum3 =
+    (Math.pow(_2pProbability * n - numOf2p), 2) / (_2pProbability * n);
+
+  let numOfT = types.reduce(
+    (prev, item, _) => (item === "T" ? prev + 1 : prev),
+    0
+  );
+  const sum4 = (Math.pow(tProbability * n - numOfT), 2) / (tProbability * n);
+
+  let numOfPK = types.reduce(
+    (prev, item, _) => (item === "PK" ? prev + 1 : prev),
+    0
+  );
+
+  console.log(numOfPK);
+
+  const sum5 =
+    Math.pow(pokerProbability * n - numOfPK, 2) / (pokerProbability * n);
+
+  const result =
+    parseFloat(sum1) +
+    parseFloat(sum2) +
+    parseFloat(sum3) +
+    parseFloat(sum4) +
+    parseFloat(sum5);
+
+  return {
+    result,
+    typess: {
+      td: numOfTD,
+      _1p: numOf1p,
+      _2p: numOf2p,
+      t: numOfT,
+      poker: numOfPK,
+    },
+  };
+};
+
+const insertPruebaHuecos = (i1, i2, numbers) => {
+  const { huecos, sizes, huecosResult } = pruebaHuecos(i1, i2, numbers);
+  const $div = document.createElement("DIV");
+  $div.innerHTML = `<p>
+  Prueba de huecos
+  <br>
+  huecos: <span>${huecos.join()}</span>
+  <br>
+  tamaño de huecos: <span>${sizes.join()}</span>
+  <br>
+  Resultado: <span>${huecosResult}</span>
+  </p>`;
+  $div.classList.add("huecos");
+  $verifications.append($div);
+};
+
+const insertPruebaPoker = (numbers) => {
+  const { result, typess } = pruebaPoker(numbers);
+  console.log(pruebaPoker(numbers));
+  const $div = document.createElement("DIV");
+  console.log({ result, typess });
+  $div.innerHTML = `<p>
+  Prueba de Poker
+  <br>
+  cartas: <span>${JSON.stringify(typess, null, "\t")}</span>
+  <br>
+  result: <span>${result}</span>
+  <br>
+  </p>`;
+  $div.classList.add("poker");
+  $verifications.append($div);
+};
 
 const insertPromedio = (numbers) => {
   const media = getMediaX(numbers);
@@ -720,6 +912,8 @@ const insertVerifications = (results) => {
   insertVarianza(unrepitedNumbers);
   insertChi2(unrepitedNumbers);
   insertCorridas(unrepitedNumbers);
+  insertPruebaHuecos(0.1, 1.0, unrepitedNumbers);
+  insertPruebaPoker(unrepitedNumbers);
 };
 
 const corridasAbajoArriba = (numbers) => {
